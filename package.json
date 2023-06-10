@@ -1,0 +1,16 @@
+{
+  "name": "fuzzysearch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "search.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest",
+    "compile": "tsc --target es6 --module commonjs search.ts --outDir ./dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jest": "^29.5.0"
+  }
+}
