@@ -1,7 +1,8 @@
 
+
 const exp = require('constants');
 const { searchWords, searchWordsOrdered } = require('./dist/search');
-
+const fuzzySearch = require('jwfsearch');
 let words = ['hello', 'world', 'foo', 'bar', 'baz'];
 
 test('searchWords function exists', () => {
@@ -40,7 +41,6 @@ let states = [
     'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington',
     'West Virginia', 'Wisconsin', 'Wyoming'
 ];
-
 
 test('searchWords returns partial matches on states', () => {
     expect(searchWords('al', states, 0)).toEqual(['Alabama', 'Alaska']);
@@ -81,3 +81,29 @@ test('searchWords returns loose matches on states using JaroWinkler', () => {
     expect(searchWords('or', states, fuzz, "jaro-winkler").length).toBeGreaterThan(3);
 }
 );
+
+test('speed test between addon fuzzy-brandon and searchWordsOrdered', () => {
+    let fuzz = 0.78;
+    let search = 'lamaba';
+    let iterations = 8000;
+    console.log(`searching for ${search} with fuzz ${fuzz} and ${iterations} iterations`);
+    let fuzzyBrandonResults = fuzzySearch(search, states, fuzz);
+    let start = new Date();
+    for (let i = 0; i < iterations; i++) {
+        fuzzySearch(search, states, fuzz);
+    }
+    let end = new Date();
+    let fuzzyTime = end - start;
+    let searchWordsResults = searchWordsOrdered(search, states, fuzz);
+    start = new Date();
+    for (let i = 0; i < iterations; i++) {
+        searchWords(search, states, fuzz, "jaro-winkler");
+    }
+    end = new Date();
+    let searchWordsTime = end - start;
+    console.log(`fuzzy-brandon: ${fuzzyTime}ms, searchWords: ${searchWordsTime}ms`);
+    console.log(`fuzzy-brandon: ${fuzzyBrandonResults}, searchWords: ${searchWordsResults}`);
+    expect(fuzzyTime).toBeLessThan(searchWordsTime);
+}
+);
+

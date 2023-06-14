@@ -95,7 +95,6 @@ function searchWordsOrdered(input, words, threshold) {
         }
     }
     matches.sort((a, b) => b[1] - a[1]);
-    console.log(matches);
-    return matches;
+    return matches.map((match) => match[0]);
 }
 exports.searchWordsOrdered = searchWordsOrdered;

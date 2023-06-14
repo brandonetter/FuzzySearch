@@ -99,7 +99,7 @@ function levenshteinDistance(a: string, b: string): number {
     return matches;
   }
 
-  function searchWordsOrdered(input: string, words: string[], threshold: number): [string, number][] {
+  function searchWordsOrdered(input: string, words: string[], threshold: number): string[] {
     const matches: [string, number][] = [];
     const normalizedInput = input.toLowerCase();
 
@@ -113,8 +113,8 @@ function levenshteinDistance(a: string, b: string): number {
     }
 
     matches.sort((a, b) => b[1] - a[1]);
-    console.log(matches);
-    return matches;
+
+    return matches.map((match) => match[0]);
   }
 
 export { searchWords, searchWordsOrdered };
